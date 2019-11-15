@@ -7,6 +7,26 @@ const fs = require("fs");
 
 /**
  * doc
+ * @param {string} dir root dir to recurse
+ * @param {array} files_ recursive array
+ * @return {array} array of files
+ */
+function getFiles(dir, files_) {
+  files_ = files_ || [];
+  const files = fs.readdirSync(dir, { withFileTypes: true });
+  files.forEach(file => {
+    const name = dir + "/" + file.name;
+    if (file.isDirectory()) {
+      getFiles(file.name, files_);
+    } else {
+      files_.push(name);
+    }
+  });
+  return files_;
+}
+
+/**
+ * doc
  */
 async function run() {
   const githubToken = core.getInput("github-token");
@@ -18,15 +38,7 @@ async function run() {
   console.log(githubToken);
   console.log(context);
 
-  fs.readdir(__dirname, function(err, files) {
-    if (err) {
-      console.log("Unable to scan directory: " + err);
-    }
-
-    files.forEach(function(file) {
-      console.log(file);
-    });
-  });
+  console.log(getFiles("./"));
 }
 
 run();
