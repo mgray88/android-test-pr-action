@@ -8,21 +8,16 @@ const fs = require("fs");
 /**
  * doc
  * @param {string} dir root dir to recurse
- * @param {array} files_ recursive array
- * @return {array} array of files
  */
-function getFiles(dir, files_) {
-  files_ = files_ || [];
+function getFiles(dir) {
   const files = fs.readdirSync(dir, { withFileTypes: true });
   files.forEach(file => {
     const name = dir + "/" + file.name;
+    console.log(name);
     if (file.isDirectory()) {
-      getFiles(file.name, files_);
-    } else {
-      files_.push(name);
+      getFiles(file.name);
     }
   });
-  return files_;
 }
 
 /**
@@ -38,7 +33,9 @@ async function run() {
   console.log(githubToken);
   console.log(context);
 
-  console.log(getFiles(process.env.GITHUB_WORKSPACE));
+  console.log(process.env.HOME);
+  console.log(process.env.GITHUB_WORKSPACE);
+  getFiles(process.env.GITHUB_WORKSPACE);
 }
 
 run();
