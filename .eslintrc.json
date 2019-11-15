@@ -1,0 +1,15 @@
+{
+  "extends": ["eslint:recommended", "google", "prettier"],
+  "env": {
+    "node": true,
+    "es6": true,
+    "commonjs": true
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
+  }
+}

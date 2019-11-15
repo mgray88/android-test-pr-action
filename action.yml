@@ -1,0 +1,10 @@
+name: "Android Test Failure PR Reporter"
+author: Michael Gray
+description: "Reports Android test failures back to the GitHub pull request"
+inputs:
+  github-token:
+    description: "This should be a token with access to your repository"
+    required: true
+runs:
+  using: "node12"
+  main: "dist/index.js"
