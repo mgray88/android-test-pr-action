@@ -5,19 +5,33 @@ const github = require("@actions/github");
 // const path = require("path");
 const fs = require("fs");
 
+const fileRe = new RegExp("TEST-.*.xml");
+
 /**
  * doc
  * @param {string} dir root dir to recurse
+ * @return {array} list of test xml files
  */
-function getFiles(dir) {
+function findTestXml(dir) {
   const files = fs.readdirSync(dir, { withFileTypes: true });
-  files.forEach(file => {
+  var xml = [];
+  files.reduce((xml, file) => {
     const name = dir + "/" + file.name;
-    console.log(name);
     if (file.isDirectory()) {
-      getFiles(file.name);
+      xml.push(findTestXml(name));
+    } else if (fileRe.test(file.name)) {
+      xml.push(file);
     }
+    return xml;
   });
+  // files.forEach(file => {
+  //   const name = dir + "/" + file.name;
+  //   console.log(name);
+  //   if (file.isDirectory()) {
+  //     getFiles(name);
+  //   }
+  // });
+  return xml;
 }
 
 /**
@@ -33,9 +47,7 @@ async function run() {
   console.log(githubToken);
   console.log(context);
 
-  console.log(process.env.HOME);
-  console.log(process.env.GITHUB_WORKSPACE);
-  getFiles(process.env.GITHUB_WORKSPACE);
+  console.log(findTestXml(process.env.GITHUB_WORKSPACE));
 }
 
 run();
