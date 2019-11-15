@@ -38,7 +38,7 @@ async function run() {
   console.log(githubToken);
   console.log(context);
 
-  console.log(getFiles("./"));
+  console.log(getFiles(process.env.GITHUB_WORKSPACE));
 }
 
 run();
