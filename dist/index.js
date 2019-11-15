@@ -537,6 +537,21 @@ module.exports = /******/ (function(modules, runtime) {
 
       /**
        * doc
+       * @param {string} dir root dir to recurse
+       */
+      function getFiles(dir) {
+        const files = fs.readdirSync(dir, { withFileTypes: true });
+        files.forEach(file => {
+          const name = dir + "/" + file.name;
+          console.log(name);
+          if (file.isDirectory()) {
+            getFiles(file.name);
+          }
+        });
+      }
+
+      /**
+       * doc
        */
       async function run() {
         const githubToken = core.getInput("github-token");
@@ -548,15 +563,9 @@ module.exports = /******/ (function(modules, runtime) {
         console.log(githubToken);
         console.log(context);
 
-        fs.readdir(__dirname, function(err, files) {
-          if (err) {
-            console.log("Unable to scan directory: " + err);
-          }
-
-          files.forEach(function(file) {
-            console.log(file);
-          });
-        });
+        console.log(process.env.HOME);
+        console.log(process.env.GITHUB_WORKSPACE);
+        getFiles(process.env.GITHUB_WORKSPACE);
       }
 
       run();
